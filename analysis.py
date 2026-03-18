@@ -1,21 +1,39 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # carregar dados
 df = pd.read_csv("dataset.csv")
 
-# criar coluna faturamento
+# criar faturamento
 df["faturamento"] = df["preco"] * df["quantidade"]
 
-# faturamento total
+# métricas
 faturamento_total = df["faturamento"].sum()
-
-# ticket médio
 ticket_medio = df["faturamento"].mean()
-
-# produtos mais vendidos
-top_produtos = df.groupby("produto")["quantidade"].sum().sort_values(ascending=False)
 
 print("Faturamento total:", faturamento_total)
 print("Ticket médio:", ticket_medio)
-print("\nProdutos mais vendidos:")
-print(top_produtos)
+
+# vendas por produto
+produtos = df.groupby("produto")["quantidade"].sum()
+
+# gráfico produtos
+produtos.plot(kind="bar")
+plt.title("Vendas por Produto")
+plt.xlabel("Produto")
+plt.ylabel("Quantidade")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig("grafico_produtos.png")
+plt.clf()
+
+# vendas por categoria
+categorias = df.groupby("categoria")["quantidade"].sum()
+
+# gráfico categorias
+categorias.plot(kind="bar")
+plt.title("Vendas por Categoria")
+plt.xlabel("Categoria")
+plt.ylabel("Quantidade")
+plt.tight_layout()
+plt.savefig("grafico_categorias.png")
